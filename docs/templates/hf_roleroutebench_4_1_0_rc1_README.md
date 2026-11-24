@@ -112,6 +112,8 @@ configs:
 > after the corresponding immutable revisions exist.
 
 **Dataset DOI:** [`10.57967/hf/11430`](https://doi.org/10.57967/hf/11430)  
+**Code repository:** [`BuiThiThanhTrang/RoleRouteBench`](https://github.com/BuiThiThanhTrang/RoleRouteBench)
+
 **Code revision:** `TO_BE_FILLED_AFTER_GIT_COMMIT`  
 **Dataset revision:** `TO_BE_FILLED_AFTER_HUB_UPLOAD`
 
