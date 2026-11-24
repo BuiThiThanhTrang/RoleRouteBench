@@ -1,0 +1,254 @@
+---
+license: other
+language:
+- en
+pretty_name: "RoleRouteBench: Dynamic Multi-Agent Routing Across Reproducible Tool Environments"
+annotations_creators:
+- expert-generated
+multilinguality:
+- monolingual
+source_datasets:
+- extended
+task_categories:
+- text-classification
+size_categories:
+- 1K<n<10K
+tags:
+- multi-agent
+- agent-routing
+- llm-routing
+- orchestration
+- dynamic-routing
+- tool-use
+- benchmark
+- code-debugging
+- formal-proof
+- database-migration
+- table-question-answering
+configs:
+- config_name: router_state
+  default: true
+  data_files:
+  - split: development
+    path: data/router_state/development.parquet
+  - split: validation
+    path: data/router_state/validation.parquet
+  - split: test
+    path: data/router_state/test.parquet
+- config_name: router_structured
+  data_files:
+  - split: development
+    path: data/router_structured/development.parquet
+  - split: validation
+    path: data/router_structured/validation.parquet
+  - split: test
+    path: data/router_structured/test.parquet
+- config_name: router_raw_development
+  data_files:
+  - split: development
+    path: data/router_raw_development/development.parquet
+- config_name: track_a_labels
+  data_files:
+  - split: development
+    path: data/track_a_labels/development.parquet
+  - split: validation
+    path: data/track_a_labels/validation.parquet
+  - split: test
+    path: data/track_a_labels/test.parquet
+- config_name: agent_catalog
+  data_files:
+  - split: train
+    path: data/agent_catalog/train.parquet
+- config_name: provenance
+  data_files:
+  - split: development
+    path: data/provenance/development.parquet
+  - split: validation
+    path: data/provenance/validation.parquet
+  - split: test
+    path: data/provenance/test.parquet
+- config_name: human_review
+  data_files:
+  - split: development
+    path: data/human_review/development.parquet
+  - split: validation
+    path: data/human_review/validation.parquet
+  - split: test
+    path: data/human_review/test.parquet
+- config_name: track_b_tasks
+  data_files:
+  - split: full
+    path: data/track_b_tasks/full.parquet
+- config_name: track_b_agents
+  data_files:
+  - split: full
+    path: data/track_b_agents/full.parquet
+- config_name: track_b_trajectories
+  data_files:
+  - split: full
+    path: data/track_b_trajectories/full.parquet
+- config_name: track_b_results
+  data_files:
+  - split: full
+    path: data/track_b_results/full.parquet
+- config_name: track_b_runs
+  data_files:
+  - split: full
+    path: data/track_b_runs/full.parquet
+- config_name: track_b_provenance
+  data_files:
+  - split: full
+    path: data/track_b_provenance/full.parquet
+- config_name: benchmark_results
+  data_files:
+  - split: full
+    path: data/benchmark_results/full.parquet
+---
+
+# RoleRouteBench
+
+> Release candidate `4.1.0-rc.1`. This local candidate is prepared for review and
+> has not been uploaded. Replace the code and dataset revision placeholders only
+> after the corresponding immutable revisions exist.
+
+**Dataset DOI:** [`10.57967/hf/11430`](https://doi.org/10.57967/hf/11430)  
+**Code revision:** `TO_BE_FILLED_AFTER_GIT_COMMIT`  
+**Dataset revision:** `TO_BE_FILLED_AFTER_HUB_UPLOAD`
+
+RoleRouteBench evaluates a decision model that repeatedly observes a public task
+state, selects one specialist role or `STOP`, and receives the observable
+consequence of that action. It separates one-step routing evaluation (Track A)
+from closed-loop task execution (Track B).
+
+## What changed in 4.1.0-rc.1
+
+- The legacy synthetic Track A remains byte-for-byte inherited from the published
+  beta.2 release for backward compatibility. It was generated through LLM
+  simulation and is not the unreleased empirical Track A V1. The rebuilt
+  997-state empirical Track A V2 is intentionally excluded because labeling
+  and human calibration review are not complete.
+- Track B now contains 112 tasks: 12 database migration, 20 code debugging,
+  40 formal proof, and 40 structured-data/Table-QA tasks.
+- Formal Proof replaces the 30-task Goedel cohort with Formal40: 8 MiniF2F,
+  20 LeanDojo, 10 APRIL, and 2 Putnam tasks using Pythagoras-Prover-4B,
+  budget 12, and independent Lean/kernel auditing.
+- Structured Data replaces SpreadsheetBench20 with Structured40: 22
+  WikiTableQuestions, 14 HiTab, and 4 TableBench tasks using Qwen3.5-9B,
+  budget 12, one tool call per executor turn, and evaluator-only trusted answers.
+- Database and Code Debugging results use the reruns produced on the current
+  source revision on 2026-11-23.
+- A new `benchmark_results` configuration reports matched multi-method results.
+
+## Release scope
+
+| Track | Status | Unit | Split policy |
+|---|---|---|---|
+| Legacy synthetic Track A | Unchanged from beta.2 | LLM-simulated isolated next-action decision | Existing development/validation/test |
+| Empirical Track A V1 | Not included | Recorded live routing states | Unreleased internal track |
+| Empirical Track A V2 | Not included | Rebuilt 997-state multi-router bank | Built and validated; labeling/review incomplete |
+| Track B | Updated | Full closed-loop trajectory | One transparent `full` split |
+| Track C | Not included | Checkpointed recovery | Deferred |
+
+### Track B task environments
+
+| Domain | Tasks | Executor | Budget | Current review status |
+|---|---:|---|---:|---|
+| Database migration and integrity | 12 | Qwen3.5-9B | 8 | Packet review inherited; routing labels pending |
+| Code debugging | 20 | Gemini 2.5 Flash | 8 | Packet review inherited; routing labels pending |
+| Formal proof | 40 | Pythagoras-Prover-4B | 12 | Runtime verified; human packet review pending |
+| Structured data / Table QA | 40 | Qwen3.5-9B | 12 | Runtime verified; human packet review pending |
+
+The reference trajectory tables contain one selected JEV run per task. The
+`benchmark_results` table additionally reports SOL, DREX, PPLX and matched
+baselines without pretending that fixed or single-agent systems share the same
+router decision interface.
+
+## Current results
+
+Each domain retains its primary endpoint:
+
+- Database and Code Debugging: public pass with `STOP`, or an independently
+  correct final task result without `STOP` (`P + E`).
+- Formal Proof: workflow success **and** independent proof audit pass.
+- Structured Data: trusted-gold end-task answer pass, independently of `STOP`.
+
+Because these endpoints differ, the aggregate describes release coverage and
+must not be treated as a homogeneous statistical leaderboard.
+
+| Method | Database / 12 | Code / 20 | Formal / 40 | Structured / 40 | Aggregate / 112 |
+|---|---:|---:|---:|---:|---:|
+| SOL | 10 | 15 | 13 | 27 | **65 (58.04%)** |
+| DREX 9B | 9 | 11 | 10 | 28 | **58 (51.79%)** |
+| JEV | 9 | 12 | 12 | 23 | **56 (50.00%)** |
+| PPLX Decider Flash | 8 | 14 | 13 | 20 | **55 (49.11%)** |
+| Fixed / predefined | 7 | 14 | 11 | 29 | **61 (54.46%)** |
+
+Single-agent has matched results for Database (9/12), Code (13/20), and
+Structured Data (25/40), but no matched Formal40 run. It is therefore not given
+an artificial 112-task aggregate. One Code single-agent final audit is
+`UNAVAILABLE` and remains visible in the result metadata.
+
+These are one-run measurements on small cohorts. They do not establish stable
+rankings, statistical dominance, or causal usefulness of a role.
+
+## Loading
+
+```python
+from datasets import load_dataset
+
+# Published legacy synthetic Track A
+track_a = load_dataset("TrangBui/RoleRouteBench", "router_state")
+track_a_labels = load_dataset("TrangBui/RoleRouteBench", "track_a_labels")
+
+# Updated Track B
+tasks = load_dataset("TrangBui/RoleRouteBench", "track_b_tasks", split="full")
+agents = load_dataset("TrangBui/RoleRouteBench", "track_b_agents", split="full")
+trajectories = load_dataset(
+    "TrangBui/RoleRouteBench", "track_b_trajectories", split="full"
+)
+results = load_dataset("TrangBui/RoleRouteBench", "track_b_results", split="full")
+benchmark_results = load_dataset(
+    "TrangBui/RoleRouteBench", "benchmark_results", split="full"
+)
+```
+
+JSON-valued columns are stored as JSON strings. Decode them with `json.loads`.
+
+## Visibility and publication policy
+
+The candidate exposes router-visible task artifacts, role cards, compact public
+trajectories, and outcome summaries. It does **not** publish packet `private/`
+directories, trusted answers, reference proofs, gold patches, raw provider
+responses, credentials, local paths, or experiment archives.
+
+The `evaluator_packet_path` field is null in this candidate. Outcome tables are
+for analysis only and must never be supplied to the router. This is a visibility
+contract, not a claim that the benchmark is a sealed test set.
+
+## Sources and licenses
+
+- Database and Code Debugging retain per-packet upstream provenance and notices.
+- Formal40 records source identifiers and revisions for MiniF2F, LeanDojo,
+  APRIL, and Putnam-derived tasks.
+- Structured40 uses WikiTableQuestions (CC-BY-SA-4.0), HiTab (Computational Use
+  of Data Agreement v1.0), and TableBench metadata declaring Apache-2.0.
+
+Source-specific notices and per-packet metadata take precedence over any single
+repository-level license label. TableBench's exact upstream revision and license
+text remain a publication checklist item. This dataset card is not legal advice.
+
+## Limitations
+
+- Formal40 and Structured40 are runtime-verified but not fully human-reviewed.
+- The legacy synthetic Track A is not aligned with the new Formal40/Table-QA40
+  environments; use it only as a historical simulated one-step track. Empirical
+  Track A V2 must not be scored as a reviewed benchmark until labels
+  and calibration review are complete.
+- Track B uses transparent public cohorts and one reference run per method; it is
+  not contamination-free and does not estimate production reliability.
+- Executor stochasticity, provider behavior, tool outcomes, termination, and
+  routing all affect closed-loop success.
+
+See `RELEASE_NOTES.md`, `PUBLICATION_CHECKLIST.md`, `release_manifest.json`, and
+`track_b_package_report.json` in this candidate for exact provenance and gates.
+

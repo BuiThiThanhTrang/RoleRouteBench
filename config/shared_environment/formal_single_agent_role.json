@@ -1,0 +1,15 @@
+[
+  {
+    "agent_id": "Formal Proof Agent",
+    "role_name": "Formal Proof Agent",
+    "role_goal": "Solve the Lean theorem end to end by inspecting the proof state, retrieving useful premises, synthesizing or repairing a proof, compiling it, verifying kernel assumptions, and diagnosing public failures.",
+    "semantic_family": "generalist",
+    "tool_access": "all_domain_tools",
+    "use_when": [
+      "The public formal-proof state has not reached kernel-verified terminal status"
+    ],
+    "expected_outputs": [
+      "One valid domain tool call that advances the public proof state"
+    ]
+  }
+]

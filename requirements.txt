@@ -1,0 +1,11 @@
+httpx
+jsonschema
+numpy
+openai
+openpyxl
+pandas
+Pillow
+python-dotenv
+PyYAML
+requests
+

@@ -1,0 +1,70 @@
+{
+  "config_version": "roleroutebench.track_a.multirouter.v2",
+  "dataset_id": "track_a_4d_multirouter_v2",
+  "output_dir": "data/RoleRouteBench/track_a_4d_multirouter_v2",
+  "split": "full",
+  "source_track": "track_b",
+  "dynamic_routers": ["jev", "sol", "drex", "pplx"],
+  "visibility_contract": {
+    "router_evaluation_view": "exact Track B router-visible state only",
+    "executor_audit_view": "exact matching Track B trajectory record, including requests, responses and tool events",
+    "private_occurrence_fields": [
+      "behavior action",
+      "dispatch status",
+      "executor trace",
+      "episode result",
+      "runtime snapshot"
+    ],
+    "private_fields_available_to_candidate_router": false,
+    "private_fields_available_to_labeler": false
+  },
+  "selection": {
+    "target_per_domain": 250,
+    "target_total_approximate": 1000,
+    "seed": 20261123,
+    "method": "deterministic_round_robin_by_origin_router_and_observable_phase",
+    "exclude_when_all_occurrences_suppressed_by_budget": true
+  },
+  "domains": {
+    "code_debugging": {
+      "source_kind": "selection_manifest",
+      "manifest": "runs/code_debugging/collection_manifest.json",
+      "run_root": "runs/code_debugging",
+      "allowed_methods": ["jev", "sol", "drex", "pplx"]
+    },
+    "database_migration_integrity": {
+      "source_kind": "complete_runs",
+      "runs": {
+        "jev": "runs/database/database_shared_jev_16k_rerun_20261123",
+        "sol": "runs/database/database_shared_sol_16k_rerun_20261123",
+        "drex": "runs/database/database_shared_drex_16k_rerun_20261123",
+        "pplx": "runs/database/database_shared_pplx_16k_rerun_20261123"
+      }
+    },
+    "formal_proof": {
+      "source_kind": "selection_manifest",
+      "manifest": "runs/formal_proof/official_run_manifest.json",
+      "run_root": "runs/formal_proof",
+      "allowed_methods": ["jev", "sol", "drex", "pplx"]
+    },
+    "structured_data_processing": {
+      "source_kind": "complete_runs",
+      "runs": {
+        "jev": "runs/structured_data/table_qa_jev_qwen9b_full40_b12",
+        "sol": "runs/structured_data/table_qa_sol_qwen9b_full40_b12",
+        "drex": "runs/structured_data/table_qa_drex_qwen9b_full40_b12",
+        "pplx": "runs/structured_data/table_qa_pplx_qwen9b_full40_b12"
+      }
+    }
+  },
+  "phase4": {
+    "sample_dir": "labeling_terra_v2",
+    "model": "openai/gpt-6.1-terra",
+    "provider": "openrouter",
+    "reasoning_effort": "high",
+    "max_output_tokens": 25000,
+    "max_attempts": 2,
+    "prompt_version": "roleroutebench.track_a.terra.v2",
+    "label_contract_version": "roleroutebench.track_a.labels.v2"
+  }
+}

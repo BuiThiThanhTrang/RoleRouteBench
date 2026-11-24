@@ -1,0 +1,106 @@
+[
+  {
+    "agent_id": "Proof State Inspector",
+    "avoid_when": [
+      "Fresh inspection of the same candidate already answers the question.",
+      "The current candidate only needs authoritative compilation or final verification."
+    ],
+    "expected_outputs": [
+      "Source-hashed tactic states before/after execution, local context, source positions, term types when available, diagnostics and explicit partial/unavailable status."
+    ],
+    "role_goal": "Observe the current Lean candidate at tactic and error positions: goals, local hypotheses, expected/actual types and placeholder locations, without changing or certifying the proof.",
+    "use_when": [
+      "A failure requires understanding the actual local goal or typeclass context at a source position.",
+      "A candidate has unclear intermediate goals or a type mismatch not resolved by existing evidence."
+    ]
+  },
+  {
+    "agent_id": "Premise and Lemma Retriever",
+    "avoid_when": [
+      "The needed lemma and candidate proof are already explicit.",
+      "The next operation is compilation."
+    ],
+    "expected_outputs": [
+      "Candidate lemmas or premises and why their types match the visible goal."
+    ],
+    "role_goal": "Identify applicable visible hypotheses and Mathlib lemmas without claiming that a proof has compiled.",
+    "use_when": [
+      "The goal requires selecting a lemma or transformation not evident from current state.",
+      "A compiler failure indicates a missing or mismatched lemma."
+    ]
+  },
+  {
+    "agent_id": "Tactic Synthesizer",
+    "avoid_when": [
+      "An unchanged candidate is awaiting compilation.",
+      "A failed candidate first needs diagnosis rather than blind regeneration."
+    ],
+    "expected_outputs": [
+      "An executor-authored candidate proof, not a success claim."
+    ],
+    "role_goal": "Construct a candidate Lean proof from the current goal and available evidence.",
+    "use_when": [
+      "The theorem is incomplete and no candidate proof exists.",
+      "A different proof strategy is justified by new evidence."
+    ]
+  },
+  {
+    "agent_id": "Proof Repair Specialist",
+    "avoid_when": [
+      "No failed candidate exists.",
+      "The current candidate has not yet been compiled."
+    ],
+    "expected_outputs": [
+      "A revised candidate tied to the concrete diagnostic."
+    ],
+    "role_goal": "Revise a failed Lean candidate using the latest compiler diagnostic while preserving the theorem statement.",
+    "use_when": [
+      "A candidate proof has a concrete compiler failure.",
+      "New feedback supports a materially revised candidate."
+    ]
+  },
+  {
+    "agent_id": "Lean Compiler Executor",
+    "avoid_when": [
+      "No candidate exists.",
+      "The unchanged candidate already has a fresh compiler result."
+    ],
+    "expected_outputs": [
+      "Kernel/compiler exit status and exact public diagnostics."
+    ],
+    "role_goal": "Compile the current candidate in the packet's pinned Lean and Mathlib environment.",
+    "use_when": [
+      "A candidate exists without a fresh compiler result.",
+      "The candidate changed after the previous compilation."
+    ]
+  },
+  {
+    "agent_id": "Kernel and Assumption Verifier",
+    "avoid_when": [
+      "Compilation is failing or stale.",
+      "No candidate exists."
+    ],
+    "expected_outputs": [
+      "Terminal-contract evidence for theorem identity, placeholders and assumptions."
+    ],
+    "role_goal": "Verify that a compiled theorem closes without forbidden placeholders or added assumptions.",
+    "use_when": [
+      "The candidate compiles and terminal compliance still needs confirmation."
+    ]
+  },
+  {
+    "agent_id": "Formal Failure Diagnostician",
+    "avoid_when": [
+      "No compiler or proof failure is visible.",
+      "The current candidate only needs compilation."
+    ],
+    "expected_outputs": [
+      "A diagnosis grounded in the visible goal and compiler feedback."
+    ],
+    "role_goal": "Explain a concrete Lean compiler or proof failure and identify evidence-grounded repair constraints.",
+    "use_when": [
+      "A fresh compiler diagnostic exists.",
+      "Repeated candidates fail without substantive progress."
+    ]
+  }
+]

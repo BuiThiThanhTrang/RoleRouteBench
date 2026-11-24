@@ -1,0 +1,15 @@
+[
+  {
+    "agent_id": "Code Debugging Agent",
+    "role_name": "Code Debugging Agent",
+    "role_goal": "Solve the debugging task end to end by reproducing the failure, inspecting public repository evidence, diagnosing the cause, authoring a minimal patch, and validating the current candidate.",
+    "semantic_family": "generalist",
+    "tool_access": "all_domain_tools",
+    "use_when": [
+      "The public regression state has not reached a fresh passing candidate validation"
+    ],
+    "expected_outputs": [
+      "One valid domain tool call that advances the public debugging state"
+    ]
+  }
+]

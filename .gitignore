@@ -1,0 +1,29 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.test-tmp/
+.venv/
+venv/
+.env
+
+# Machine-local runtime resources and generated outputs.
+.cache/
+.packet_work/
+cache/
+data/
+runs/
+report/
+hf_release/
+hf_release_staging/
+dist/
+build/
+benchmarks/
+config/shared_environment/code_runtime_profiles.json
+
+# Review application state.
+review_app/.streamlit/
+review_app/*.db
+

@@ -1,0 +1,15 @@
+[
+  {
+    "agent_id": "Database Migration Agent",
+    "role_name": "Database Migration Agent",
+    "role_goal": "Solve the database migration task end to end by inspecting the schema and data, authoring migration SQL, executing it transactionally, validating integrity and performance, and recovering from public failures.",
+    "semantic_family": "generalist",
+    "tool_access": "all_domain_tools",
+    "use_when": [
+      "The public database migration state has not reached its terminal contract"
+    ],
+    "expected_outputs": [
+      "One valid domain tool call that advances the public migration state"
+    ]
+  }
+]

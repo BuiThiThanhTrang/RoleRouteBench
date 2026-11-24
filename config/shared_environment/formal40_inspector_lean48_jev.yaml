@@ -1,0 +1,41 @@
+packet_root: data/RoutingBench/formal40_pythagoras_v1_20261118
+output_root: runs
+domain: formal_proof
+role_cards: config/shared_environment/formal40_inspector_roles.json
+lean_cache: ../.routingbench_lean_cache
+seed: 42
+max_calls: 12
+workers: 1
+router:
+  type: decision
+  provider: openrouter
+  model: typesafe/jev-1.13
+  api_key_env: OPENROUTER_API_KEY
+  orchestration_profile: structured
+  observable_rejection_guard_enabled: false
+  timeout_seconds: 30
+  max_retries: 5
+executor:
+  provider: huggingface
+  base_url: https://router.huggingface.co/v1
+  model: Pythagoras-LM/Pythagoras-Prover-4B:featherless-ai
+  api_key_env: HF_TOKEN
+  max_tokens: 16384
+  timeout_seconds: 300
+  transport_retries: 5
+  max_tool_calls: 3
+  formal_protocol:
+    version: artifact_first_v1
+    proof_max_tokens: 4096
+    diagnosis_max_tokens: 1024
+    retrieval_max_tokens: 1024
+    input_max_tokens: 8192
+    tokenizer_path: .cache/formal_runtime_tools/pythagoras-tokenizer.json
+    tokenizer_sha256: aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4
+runtime_audit:
+  lean_version: 4.8.0-rc1
+  mathlib_revision: db651742f2c631e5b8525e9aabcf3d61ed094a4a
+  expected_packets: 30
+runtime:
+  formal_context_policy: bounded_artifact_handoff_v1
+  formal_inspection_policy: tactic_state_v1

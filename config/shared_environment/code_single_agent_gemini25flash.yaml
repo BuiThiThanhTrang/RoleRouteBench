@@ -1,0 +1,19 @@
+packet_root: data/RoutingBench/v4_beta_4d_82_20261102
+output_root: runs
+domain: code_debugging
+runtime_profiles: config/shared_environment/code_runtime_profiles.json
+role_cards: config/shared_environment/code_single_agent_role.json
+seed: 42
+max_calls: 8
+workers: 3
+router:
+  type: single_agent
+  agent_id: Code Debugging Agent
+executor:
+  provider: openrouter
+  model: google/gemini-2.5-flash
+  api_key_env: OPENROUTER_API_KEY
+  max_tokens: 16384
+  timeout_seconds: 300
+  transport_retries: 5
+  max_tool_calls: 3

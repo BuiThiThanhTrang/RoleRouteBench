@@ -1,0 +1,4 @@
+# Use a separate environment from local models pinned to older Transformers.
+-r requirements-shared-environment.txt
+# Validated against the pinned Pythagoras tokenizer JSON.
+tokenizers==0.22.2

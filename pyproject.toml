@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "roleroutebench"
+version = "4.1.0rc1"
+description = "A standalone benchmark for dynamic role routing in multi-agent systems"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+dependencies = [
+  "httpx",
+  "jsonschema",
+  "numpy",
+  "openai",
+  "openpyxl",
+  "pandas",
+  "Pillow",
+  "python-dotenv",
+  "PyYAML",
+  "requests",
+]
+
+[project.optional-dependencies]
+review = ["streamlit"]
+test = ["pytest"]
+formal = ["transformers==4.43.4", "tokenizers==0.19.1"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["routing_benchmark*", "inference*", "model*", "role_aware*", "review_app*"]
+exclude = ["tests*", "benchmarks*", "scripts*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
