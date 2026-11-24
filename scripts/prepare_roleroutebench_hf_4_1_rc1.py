@@ -4,7 +4,9 @@ The builder is intentionally write-once and never modifies the published beta.2
 folder. The legacy synthetic Track A is copied byte-for-byte from that folder for
 backward compatibility; it is not the unreleased empirical Track A V1. Track B is
 rebuilt from the current four-domain packet banks and the frozen JEV episode
-selections. Private evaluator directories and raw model outputs are excluded.
+selections. Empirical Track A V2 is reserved for a follow-up update after its
+results table finishes and is verified. Private evaluator directories and raw
+model outputs are excluded.
 """
 
 from __future__ import annotations
@@ -43,7 +45,7 @@ TRACK_A_PROVENANCE = {
     },
     "empirical_track_a_v2": {
         "state_origin": "recorded_multi_router_track_b_trajectories",
-        "status": "excluded_labeling_and_review_incomplete",
+        "status": "follow_up_pending_results_table_completion_and_verification",
     },
 }
 TRACK_A_CONFIGS = (
@@ -611,7 +613,7 @@ def build(output: Path) -> dict[str, Any]:
 
     shutil.copy2(README_TEMPLATE, output / "README.md")
     shutil.copy2(NOTES_TEMPLATE, output / "RELEASE_NOTES.md")
-    checklist = """# Publication checklist\n\n- [x] Track B contains 112 unique tasks.\n- [x] Reference JEV trajectories/results cover the same 112 tasks.\n- [x] Legacy synthetic Track A is copied byte-for-byte from beta.2 for compatibility.\n- [x] The unreleased empirical Track A V1 is not represented as published.\n- [x] Empirical Track A V2 is excluded while labeling and review are incomplete.\n- [x] Packet private directories and raw model outputs are excluded.\n- [x] Multi-method results preserve domain-specific primary endpoints.\n- [ ] Final semantic version approved.\n- [ ] Git code commit and tag created; README placeholder replaced.\n- [ ] TableBench upstream revision/license text reviewed.\n- [ ] Formal40 and Structured40 human-review wording approved.\n- [ ] Hugging Face parent revision recorded and final upload diff reviewed.\n- [ ] Dataset revision and DOI revision links inserted after upload.\n"""
+    checklist = """# Publication checklist\n\n- [x] Track B contains 112 unique tasks.\n- [x] Reference JEV trajectories/results cover the same 112 tasks.\n- [x] Legacy synthetic Track A is copied byte-for-byte from beta.2 for compatibility.\n- [x] The unreleased empirical Track A V1 is not represented as published.\n- [x] Empirical Track A V2 is reserved for a follow-up after its results table finishes and is verified.\n- [x] Packet private directories and raw model outputs are excluded.\n- [x] Multi-method results preserve domain-specific primary endpoints.\n- [ ] Final semantic version approved.\n- [ ] Git code commit and tag created; README placeholder replaced.\n- [ ] TableBench upstream revision/license text reviewed.\n- [ ] Formal40 and Structured40 human-review wording approved.\n- [ ] Hugging Face parent revision recorded and final upload diff reviewed.\n- [ ] Dataset revision and DOI revision links inserted after upload.\n"""
     (output / "PUBLICATION_CHECKLIST.md").write_text(checklist, encoding="utf-8", newline="\n")
 
     write_json(
@@ -632,7 +634,8 @@ def build(output: Path) -> dict[str, Any]:
         "status": "LOCAL_RELEASE_CANDIDATE_NOT_UPLOADED",
         "track_a_policy": (
             "legacy synthetic Track A byte-identical to beta.2; empirical Track A V1 "
-            "unreleased; empirical Track A V2 excluded while labeling/review are incomplete"
+            "unreleased; empirical Track A V2 reserved for a follow-up after the results "
+            "table finishes and is verified"
         ),
         "track_a_provenance": TRACK_A_PROVENANCE,
         "track_b_split": "full",

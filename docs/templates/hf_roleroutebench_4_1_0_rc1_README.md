@@ -120,13 +120,21 @@ state, selects one specialist role or `STOP`, and receives the observable
 consequence of that action. It separates one-step routing evaluation (Track A)
 from closed-loop task execution (Track B).
 
+## Authors and contributors
+
+- Trang Bui — dataset creator, benchmark and environment designer, release
+  maintainer, and author of the current four-domain beta release.
+- Tran Ngoc Cam Nguyen — planned domain lead for Multi-hop Knowledge and
+  Document/Media.
+
 ## What changed in 4.1.0-rc.1
 
 - The legacy synthetic Track A remains byte-for-byte inherited from the published
   beta.2 release for backward compatibility. It was generated through LLM
   simulation and is not the unreleased empirical Track A V1. The rebuilt
-  997-state empirical Track A V2 is intentionally excluded because labeling
-  and human calibration review are not complete.
+  997-state empirical Track A V2 is intentionally excluded from this update.
+  A follow-up Track A update is planned within the next few days, after its
+  results table finishes running and the outputs are verified.
 - Track B now contains 112 tasks: 12 database migration, 20 code debugging,
   40 formal proof, and 40 structured-data/Table-QA tasks.
 - Formal Proof replaces the 30-task Goedel cohort with Formal40: 8 MiniF2F,
@@ -145,7 +153,7 @@ from closed-loop task execution (Track B).
 |---|---|---|---|
 | Legacy synthetic Track A | Unchanged from beta.2 | LLM-simulated isolated next-action decision | Existing development/validation/test |
 | Empirical Track A V1 | Not included | Recorded live routing states | Unreleased internal track |
-| Empirical Track A V2 | Not included | Rebuilt 997-state multi-router bank | Built and validated; labeling/review incomplete |
+| Empirical Track A V2 | Follow-up pending | Rebuilt 997-state multi-router bank | Planned within a few days after the results table finishes and is verified |
 | Track B | Updated | Full closed-loop trajectory | One transparent `full` split |
 | Track C | Not included | Checkpointed recovery | Deferred |
 
@@ -242,8 +250,9 @@ text remain a publication checklist item. This dataset card is not legal advice.
 - Formal40 and Structured40 are runtime-verified but not fully human-reviewed.
 - The legacy synthetic Track A is not aligned with the new Formal40/Table-QA40
   environments; use it only as a historical simulated one-step track. Empirical
-  Track A V2 must not be scored as a reviewed benchmark until labels
-  and calibration review are complete.
+  Track A V2 is not part of this release and must not be inferred from the
+  unchanged legacy tables. Its results will be published in the planned
+  follow-up after the new results table is complete and verified.
 - Track B uses transparent public cohorts and one reference run per method; it is
   not contamination-free and does not estimate production reliability.
 - Executor stochasticity, provider behavior, tool outcomes, termination, and
@@ -251,4 +260,13 @@ text remain a publication checklist item. This dataset card is not legal advice.
 
 See `RELEASE_NOTES.md`, `PUBLICATION_CHECKLIST.md`, `release_manifest.json`, and
 `track_b_package_report.json` in this candidate for exact provenance and gates.
+
+## Roadmap
+
+- publish the empirical Track A V2 follow-up within the next few days, after the
+  results table finishes and is verified;
+- restore the redesigned Track C recovery benchmark;
+- finish structured-data human review; and
+- add four additional Track B domains to reach the planned eight-domain suite,
+  including Multi-hop Knowledge and Document/Media led by Tran Ngoc Cam Nguyen.
 

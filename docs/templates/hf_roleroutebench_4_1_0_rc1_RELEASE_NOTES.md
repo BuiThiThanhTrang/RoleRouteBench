@@ -15,8 +15,9 @@ published Hugging Face repository by itself.
 - Track B total: 82 → 112 tasks.
 - Legacy synthetic Track A: unchanged and retained for backward compatibility.
   This LLM-generated simulated state bank is not the unreleased empirical Track A
-  V1. Empirical Track A V2 is built but excluded while labeling and review are
-  incomplete.
+  V1. Empirical Track A V2 is not included in this update. A follow-up Track A
+  update is planned within the next few days, after its results table finishes
+  running and the outputs are verified.
 
 ## Result update
 
@@ -43,4 +44,11 @@ without fabricating a Formal40 value.
 4. Confirm whether evaluator-private artifacts remain withheld.
 5. Confirm that Formal40 and Structured40 are described as human-review pending.
 6. Run the clean candidate validator and inspect the generated checksum manifest.
+
+## Authors and contributors
+
+- Trang Bui — dataset creator, benchmark and environment designer, release
+  maintainer, and author of the current four-domain beta release.
+- Tran Ngoc Cam Nguyen — planned domain lead for Multi-hop Knowledge and
+  Document/Media.
 

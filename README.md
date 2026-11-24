@@ -20,7 +20,7 @@ Track A V1 used internally by this project.
 |---|---|---|
 | Legacy synthetic Track A | LLM-generated simulated states | Published for backward compatibility |
 | Empirical Track A V1 | Recorded live routing states | Not released |
-| Empirical Track A V2 | Current multi-router Track B trajectories | Built and validated; labeling/review incomplete |
+| Empirical Track A V2 | Current multi-router Track B trajectories | Follow-up release planned within a few days, after the results table finishes and is verified |
 | Track B | Closed-loop router/executor trajectories | Published and under active revision |
 
 Release metadata must retain this distinction. In particular, the legacy
