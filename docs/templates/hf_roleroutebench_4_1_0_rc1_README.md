@@ -107,15 +107,13 @@ configs:
 
 # RoleRouteBench
 
-> Release candidate `4.1.0-rc.1`. This local candidate is prepared for review and
-> has not been uploaded. Replace the code and dataset revision placeholders only
-> after the corresponding immutable revisions exist.
+> Release candidate `4.1.0-rc.1`. This update refreshes Track B while retaining
+> the published legacy synthetic Track A unchanged for backward compatibility.
 
 **Dataset DOI:** [`10.57967/hf/11430`](https://doi.org/10.57967/hf/11430)  
 **Code repository:** [`BuiThiThanhTrang/RoleRouteBench`](https://github.com/BuiThiThanhTrang/RoleRouteBench)
 
-**Code revision:** `TO_BE_FILLED_AFTER_GIT_COMMIT`  
-**Dataset revision:** `TO_BE_FILLED_AFTER_HUB_UPLOAD`
+**Code revision:** [`e551ae9`](https://github.com/BuiThiThanhTrang/RoleRouteBench/commit/e551ae9d754513be68661cdda55f1a9bf6ec7413)
 
 RoleRouteBench evaluates a decision model that repeatedly observes a public task
 state, selects one specialist role or `STOP`, and receives the observable

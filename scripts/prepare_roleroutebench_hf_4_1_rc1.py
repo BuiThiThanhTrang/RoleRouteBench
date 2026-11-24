@@ -673,7 +673,7 @@ def build(output: Path) -> dict[str, Any]:
     package_report = {
         "schema_version": "roleroutebench.hf_candidate.v2",
         "release": RELEASE_VERSION,
-        "status": "LOCAL_RELEASE_CANDIDATE_NOT_UPLOADED",
+        "status": "HUB_RELEASE_CANDIDATE",
         "track_a_policy": (
             "legacy synthetic Track A byte-identical to beta.2; empirical Track A V1 "
             "unreleased; empirical Track A V2 reserved for a follow-up after the results "
@@ -708,10 +708,10 @@ def build(output: Path) -> dict[str, Any]:
         {
             "schema_version": "roleroutebench.release_candidate.v1",
             "release": RELEASE_VERSION,
-            "status": "LOCAL_RELEASE_CANDIDATE_NOT_UPLOADED",
+            "status": "HUB_RELEASE_CANDIDATE",
             "base_release": "4.0.0-beta.2",
-            "code_revision": "TO_BE_FILLED_AFTER_GIT_COMMIT",
-            "dataset_revision": "TO_BE_FILLED_AFTER_HUB_UPLOAD",
+            "code_revision": "e551ae9d754513be68661cdda55f1a9bf6ec7413",
+            "dataset_revision": "assigned_by_hugging_face_commit",
             "track_a_provenance": TRACK_A_PROVENANCE,
             "track_b_packet_count": len(tasks),
             "private_evaluator_artifacts_published": False,
