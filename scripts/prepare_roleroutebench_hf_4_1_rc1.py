@@ -24,9 +24,10 @@ import pandas as pd
 
 PROJECT = Path(__file__).resolve().parents[1]
 REPOSITORY_ROOT = PROJECT.parent
-DATA_ROOT = PROJECT / "data" / "RoutingBench"
-RUNS_ROOT = PROJECT / "runs"
-BASE_RELEASE = PROJECT / "hf_release" / "RoutingBench-V4"
+SOURCE_WORKSPACE = PROJECT
+DATA_ROOT = SOURCE_WORKSPACE / "data" / "RoutingBench"
+RUNS_ROOT = SOURCE_WORKSPACE / "runs"
+BASE_RELEASE = SOURCE_WORKSPACE / "hf_release" / "RoutingBench-V4"
 DEFAULT_OUTPUT = PROJECT / "hf_release" / "RoleRouteBench-4.1.0-rc1"
 README_TEMPLATE = PROJECT / "docs" / "templates" / "hf_roleroutebench_4_1_0_rc1_README.md"
 NOTES_TEMPLATE = PROJECT / "docs" / "templates" / "hf_roleroutebench_4_1_0_rc1_RELEASE_NOTES.md"
@@ -98,6 +99,47 @@ DOMAIN_SPECS: dict[str, dict[str, Any]] = {
 }
 
 
+def configure_source_workspace(source_workspace: Path) -> None:
+    """Point release inputs at an external artifact workspace.
+
+    Generated data and run archives are intentionally excluded from the
+    standalone source repository. This override lets the release builder consume
+    those immutable inputs without copying them into Git or changing the
+    benchmark harness.
+    """
+
+    global SOURCE_WORKSPACE, DATA_ROOT, RUNS_ROOT, BASE_RELEASE
+    SOURCE_WORKSPACE = source_workspace.resolve()
+    DATA_ROOT = SOURCE_WORKSPACE / "data" / "RoutingBench"
+    RUNS_ROOT = SOURCE_WORKSPACE / "runs"
+    BASE_RELEASE = SOURCE_WORKSPACE / "hf_release" / "RoutingBench-V4"
+
+    DOMAIN_SPECS["database_migration_integrity"]["packet_root"] = (
+        DATA_ROOT / "v4_domain_packets_rc1" / "packs" / "database_migration_integrity"
+    )
+    DOMAIN_SPECS["database_migration_integrity"]["source_manifest"] = (
+        RUNS_ROOT / "database" / "collection_manifest.json"
+    )
+    DOMAIN_SPECS["code_debugging"]["packet_root"] = (
+        DATA_ROOT / "v4_code_debugging_rc1" / "packs" / "code_debugging"
+    )
+    DOMAIN_SPECS["code_debugging"]["source_manifest"] = (
+        RUNS_ROOT / "code_debugging" / "collection_manifest.json"
+    )
+    DOMAIN_SPECS["formal_proof"]["packet_root"] = (
+        DATA_ROOT / "formal40_pythagoras_v1_20261118" / "packs" / "formal_proof"
+    )
+    DOMAIN_SPECS["formal_proof"]["source_manifest"] = (
+        RUNS_ROOT / "formal_proof" / "official_run_manifest.json"
+    )
+    DOMAIN_SPECS["structured_data_processing"]["packet_root"] = (
+        DATA_ROOT / "structured_table_qa_v1_40" / "packs" / "structured_data_processing"
+    )
+    DOMAIN_SPECS["structured_data_processing"]["run_path"] = (
+        RUNS_ROOT / "structured_data" / "table_qa_jev_qwen9b_full40_b12"
+    )
+
+
 def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -127,7 +169,7 @@ def jdump(value: Any) -> str:
 
 def project_relative(path: Path) -> str:
     try:
-        return path.resolve().relative_to(PROJECT.resolve()).as_posix()
+        return path.resolve().relative_to(SOURCE_WORKSPACE).as_posix()
     except ValueError:
         return str(path.resolve())
 
@@ -136,7 +178,7 @@ def resolve_run_path(raw: str | Path) -> Path:
     path = Path(raw)
     if path.is_absolute():
         return path
-    candidate = PROJECT / path
+    candidate = SOURCE_WORKSPACE / path
     return candidate if candidate.exists() else RUNS_ROOT / path
 
 
@@ -144,7 +186,7 @@ def manifest_run_path(manifest: dict[str, Any], run: dict[str, Any]) -> Path:
     if run.get("new_path"):
         return resolve_run_path(run["new_path"])
     if manifest.get("run_root"):
-        candidate = PROJECT / str(manifest["run_root"]) / str(run["run_id"])
+        candidate = SOURCE_WORKSPACE / str(manifest["run_root"]) / str(run["run_id"])
         if candidate.exists():
             return candidate
     return resolve_run_path(run["run_id"])
@@ -370,7 +412,7 @@ def p_plus_e_result_rows(domain: str, manifest_path: Path) -> list[dict[str, Any
 
 
 def formal_result_rows() -> list[dict[str, Any]]:
-    path = PROJECT / "report" / "formal40_final_results.json"
+    path = SOURCE_WORKSPACE / "report" / "formal40_final_results.json"
     report = read_json(path)
     return [
         {
@@ -395,7 +437,7 @@ def formal_result_rows() -> list[dict[str, Any]]:
 
 
 def structured_result_rows() -> list[dict[str, Any]]:
-    path = PROJECT / "report" / "structured40_final_results.json"
+    path = SOURCE_WORKSPACE / "report" / "structured40_final_results.json"
     report = read_json(path)
     rows = []
     for row in report["Totals"]:
@@ -767,8 +809,15 @@ def validate(output: Path) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--source-workspace",
+        type=Path,
+        default=SOURCE_WORKSPACE,
+        help="Workspace containing excluded data/, runs/, report/ and base release artifacts.",
+    )
     parser.add_argument("--verify", action="store_true")
     args = parser.parse_args()
+    configure_source_workspace(args.source_workspace)
     report = validate(args.output) if args.verify else build(args.output)
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0
