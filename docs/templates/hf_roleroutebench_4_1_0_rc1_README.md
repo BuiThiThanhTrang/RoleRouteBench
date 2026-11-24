@@ -189,15 +189,89 @@ must not be treated as a homogeneous statistical leaderboard.
 | DREX 9B | 9 | 11 | 10 | 28 | **58 (51.79%)** |
 | JEV | 9 | 12 | 12 | 23 | **56 (50.00%)** |
 | PPLX Decider Flash | 8 | 14 | 13 | 20 | **55 (49.11%)** |
-| Fixed / predefined | 7 | 14 | 11 | 29 | **61 (54.46%)** |
+| Single agent | 9 | 13 |  | 25 |  |
+| Fixed workflow | 7 | 14 | 11 | 29 | **61 (54.46%)** |
 
-Single-agent has matched results for Database (9/12), Code (13/20), and
-Structured Data (25/40), but no matched Formal40 run. It is therefore not given
-an artificial 112-task aggregate. One Code single-agent final audit is
-`UNAVAILABLE` and remains visible in the result metadata.
+Blank cells mean that no matched result is available. In particular, there is
+no matched single-agent Formal40 run, so no artificial 112-task single-agent
+aggregate is reported. One Code single-agent final audit is `UNAVAILABLE` and
+remains visible in the result metadata.
 
 These are one-run measurements on small cohorts. They do not establish stable
 rankings, statistical dominance, or causal usefulness of a role.
+
+### Database migration and integrity
+
+On the 12-task Database cohort, SOL reaches 10 `P + E` passes; DREX, JEV and
+single agent reach 9; PPLX reaches 8; and the fixed workflow reaches 7. The
+differences correspond to only one to three tasks, so this run does not support
+a stable ranking. The endpoint intentionally credits an independently correct
+final database even when the router did not emit `STOP`; public stopping behavior
+and end-task correctness should therefore be inspected separately.
+
+The dynamic routers also follow visibly different strategies. JEV and SOL
+frequently combine schema inspection with migration authoring and transactional
+execution; DREX concentrates more heavily on author/executor transitions; PPLX
+uses the data-profiler branch more often in this run. These role counts describe
+the observed trajectories, not the causal usefulness of a role. The fixed
+workflow uses fewer executor calls overall but achieves fewer `P + E` passes;
+with only 12 tasks and one run per method, this is not a general efficiency or
+accuracy claim.
+
+### Code debugging
+
+On the 20-task Code cohort, SOL reaches 15 `P + E` passes, PPLX and the fixed
+workflow reach 14, single agent reaches 13, JEV reaches 12, and DREX reaches 11.
+The gap between STOP-gated public completion and independent final evaluation is
+especially important in this domain: a run may exhaust its routing budget or
+omit `STOP` while still leaving a correct patch. For that reason, the table uses
+the declared `P + E` endpoint and preserves stopping diagnostics separately.
+
+The trajectories again show different policies rather than one shared pipeline.
+JEV emphasizes patch authoring and regression verification, SOL combines patch
+authoring with diagnosis and reproduction, DREX repeatedly continues patch and
+verification branches, and PPLX calls the diagnostician most often in this run.
+The fixed workflow reaches 14/20 with a literal predefined sequence and terminal
+short-circuit; it is not an intelligent gated pipeline. One unavailable
+single-agent final audit remains explicit instead of being imputed. Provider
+behavior, executor generation, routing, tool outcomes and termination all affect
+these results.
+
+### Formal proof
+
+Formal40 contains 8 MiniF2F, 20 LeanDojo, 10 APRIL and 2 Putnam tasks across the
+two pinned Lean runtimes. SOL and PPLX each reach 13/40, JEV 12/40, the fixed
+workflow 11/40, and DREX 10/40. DREX has 11 proof-audit passes but only 10 full
+workflow successes, illustrating why proof validity and workflow completion are
+reported separately. No matched single-agent Formal40 result is available.
+
+Recovery from an observed proof failure occurs in 3/29 SOL, 2/29 PPLX, 1/28
+fixed, 1/29 JEV and 0/30 DREX trajectories. SOL uses more evidence/retrieval
+branches, JEV is diagnosis-heavy, DREX repeatedly remains in repair, and PPLX is
+compiler-heavy in this run. The fixed workflow has the lowest observed executor
+text-token proxy (19.9k per task, versus 36.3k--48.5k for the dynamic routers),
+but this proxy excludes router tokens, is not USD cost, and does not normalize
+provider load or run time. The small recovery counts and one run per method do
+not establish statistical dominance.
+
+### Structured data / Table QA
+
+Structured40 replaces the earlier SpreadsheetBench20 cohort with 22
+WikiTableQuestions, 14 HiTab and 4 TableBench tasks under a normalized typed
+answer/evidence contract. Trusted-gold passes are 29/40 for the fixed workflow,
+28/40 for DREX, 27/40 for SOL, 25/40 for single agent, 23/40 for JEV and 20/40
+for PPLX. This is a task-family and contract change, not a causal before/after
+comparison of router quality.
+
+Among the dynamic routers, STOP F1 is 91.7% for SOL, 90.5% for JEV, 85.7% for
+DREX and 65.4% for PPLX; it is a stopping metric, not overall task accuracy.
+Observed recovery after public failure is 13/23 for DREX, 11/24 for SOL, 9/23
+for JEV and 1/17 for PPLX, compared with 13/23 for single agent and 12/23 for the
+fixed workflow. JEV is answer-composer-heavy, SOL uses more inspection and
+analysis, DREX combines analysis, selection and composition, and PPLX performs
+more repeated inspection and diagnosis. These trajectories demonstrate strategy
+diversity, but the 40-task, single-run measurements do not prove causal role
+utility or a stable leaderboard.
 
 ## Loading
 
